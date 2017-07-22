@@ -23,7 +23,7 @@ public class Kompanija extends AbstractObject {
     private String sifraDelatnosti;
     private String poslovnoIme;
     private String kontakt;
-    private List<Bransa> branse;
+    private List<Bransa> branse = new ArrayList<>();
 
     public Kompanija() {
     }
@@ -35,6 +35,10 @@ public class Kompanija extends AbstractObject {
         this.poslovnoIme = poslovnoIme;
         this.kontakt = kontakt;
         this.branse = branse;
+    }
+
+    Kompanija(int kompanijaID) {
+        this.kompanijaID = kompanijaID;
     }
     
     
@@ -139,10 +143,11 @@ public class Kompanija extends AbstractObject {
         return branse;
     }
 
-    public void setBransa(List<Bransa> branse) {
+    public void setBranse(List<Bransa> branse) {
         this.branse = branse;
     }
 
+    
     public List<Bransa> getBranse() {
         return branse;
     }

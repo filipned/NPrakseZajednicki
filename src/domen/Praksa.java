@@ -6,8 +6,16 @@
 package domen;
 
 import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import sun.java2d.pipe.SpanShapeRenderer;
 
 /**
  *
@@ -18,8 +26,8 @@ public class Praksa extends AbstractObject {
     private int praksaID;
     private Kompanija kompanija;
     private Student student;
-    private Date datumOd;
-    private Date datumDo;
+    private java.util.Date datumOd;
+    private java.util.Date datumDo;
     private String komentarPoslodavca;
     private int ocena;
     private Bransa bransa;
@@ -27,7 +35,7 @@ public class Praksa extends AbstractObject {
     public Praksa() {
     }
 
-    public Praksa(int praksaID, Kompanija kompanija, Student student, Date datumOd, Date datumDo, String komentarPoslodavca, int ocena, Bransa bransa) {
+    public Praksa(int praksaID, Kompanija kompanija, Student student, java.util.Date datumOd, java.util.Date datumDo, String komentarPoslodavca, int ocena, Bransa bransa) {
         this.praksaID = praksaID;
         this.kompanija = kompanija;
         this.student = student;
@@ -42,22 +50,22 @@ public class Praksa extends AbstractObject {
     
     @Override
     public String vratiImeTabele() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return "prakse";
     }
 
     @Override
     public String vratiParametre() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return String.format("0, '%s', '%s', '%s', '%s', '%s', '%s', '%s'", student.getStudentID(), kompanija.getKompanijaID(), new Timestamp(datumOd.getTime()), new Timestamp(datumDo.getTime()), komentarPoslodavca, ocena, bransa.getBransaID());
     }
 
     @Override
     public String vratiPK() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return "praksaID";
     }
 
     @Override
     public int vratiVrednostPK() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return praksaID;
     }
 
     @Override
@@ -67,7 +75,30 @@ public class Praksa extends AbstractObject {
 
     @Override
     public List<AbstractObject> RSuTabelu(ResultSet rs) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        AbstractObject praksa;
+        List<AbstractObject> prakse = new ArrayList<>();
+        try {
+            while(rs.next()) {
+                int praksaID = rs.getInt("praksaID");
+                int studentID = rs.getInt("studentID");
+                int kompanijaID = rs.getInt("kompanijaID");
+                String datumOd = rs.getString("datumOd");
+                String datumDo = rs.getString("datumDo");
+                String komentar = rs.getString("komentarPoslodavca");
+                int ocena = rs.getInt("ocena");
+                int bransaID = rs.getInt("bransaID");
+                
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                praksa = new Praksa(praksaID, new Kompanija(kompanijaID), new Student(studentID), sdf.parse(datumOd), sdf.parse(datumDo), komentar, ocena, new Bransa(bransaID, null));
+                
+                prakse.add(praksa);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(Kompanija.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ParseException ex) {
+            Logger.getLogger(Praksa.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return prakse;
     }
 
     @Override
@@ -77,7 +108,7 @@ public class Praksa extends AbstractObject {
 
     @Override
     public void postaviVrednostPK(int pk) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        praksaID = pk;
     }
 
     public int getPraksaID() {
@@ -104,19 +135,19 @@ public class Praksa extends AbstractObject {
         this.student = student;
     }
 
-    public Date getDatumOd() {
+    public java.util.Date getDatumOd() {
         return datumOd;
     }
 
-    public void setDatumOd(Date datumOd) {
+    public void setDatumOd(java.util.Date datumOd) {
         this.datumOd = datumOd;
     }
 
-    public Date getDatumDo() {
+    public java.util.Date getDatumDo() {
         return datumDo;
     }
 
-    public void setDatumDo(Date datumDo) {
+    public void setDatumDo(java.util.Date datumDo) {
         this.datumDo = datumDo;
     }
 
@@ -142,6 +173,11 @@ public class Praksa extends AbstractObject {
 
     public void setBransa(Bransa bransa) {
         this.bransa = bransa;
+    }
+
+    @Override
+    public String toString() {
+        return student.toString() + " " + kompanija.toString() + " " + bransa.getImeBranse() + ", Ocena " + ocena;
     }
     
     

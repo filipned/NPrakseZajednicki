@@ -39,6 +39,10 @@ public class Student extends AbstractObject {
         this.pohadjaoPraksu = pohadjaoPraksu;
         this.fakultet = fakultet;
     }
+
+    Student(int studentID) {
+        this.studentID = studentID;
+    }
     
     
     
