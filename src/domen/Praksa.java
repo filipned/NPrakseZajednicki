@@ -179,6 +179,22 @@ public class Praksa extends AbstractObject {
     public String toString() {
         return student.toString() + " " + kompanija.toString() + " " + bransa.getImeBranse() + ", Ocena " + ocena;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if(o instanceof Praksa) {
+            Praksa praksa = (Praksa) o;
+            if((this.student.getStudentID() == praksa.getStudent().getStudentID() )&& 
+                    (this.kompanija.getKompanijaID() == praksa.getKompanija().getKompanijaID()) && 
+                    (this.bransa.getBransaID() == praksa.getBransa().getBransaID()) && 
+                    (this.datumOd.after(praksa.getDatumOd()) && this.datumOd.before(praksa.getDatumDo())) || 
+                    (this.datumDo.after(praksa.getDatumOd()) && this.datumDo.before(praksa.getDatumDo())) ) {
+                return true;
+            }
+        }
+        return false;
+    }
+    
     
     
 }
